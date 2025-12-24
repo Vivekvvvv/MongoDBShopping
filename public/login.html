@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>惠多多 - 登录</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: "Microsoft YaHei", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+            position: relative;
+            padding: 40px 20px;
+        }
+
+        /* 背景装饰 */
+        body::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: float 20s infinite ease-in-out;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-20px) rotate(10deg);
+            }
+        }
+
+        /* 品牌logo区域 */
+        .brand-header {
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            z-index: 10;
+        }
+
+
+        .brand-logo {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #fff, #f8f9fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+        }
+
+        .brand-tagline {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.9rem;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        /* 主容器 */
+        .auth-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 50px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 480px;
+            box-shadow:
+                0 20px 40px rgba(0, 0, 0, 0.2),
+                0 10px 20px rgba(0, 0, 0, 0.1),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            margin: 20px 0;
+        }
+
+        .auth-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 20px 20px 0 0;
+        }
+
+        /* 标题样式 */
+        .auth-title {
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2c3e50;
+            display: none;
+        }
+
+        .auth-title.active {
+            display: block;
+        }
+
+        /* 标签页 */
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 30px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 4px;
+            position: relative;
+        }
+
+        .auth-tab {
+            flex: 1;
+            text-align: center;
+            padding: 12px 20px;
+            cursor: pointer;
+            color: #6c757d;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .auth-tab:hover {
+            color: #495057;
+        }
+
+        .auth-tab.active {
+            color: #fff;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            transform: translateY(-1px);
+        }
+
+        /* 表单样式 */
+        .auth-form {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .auth-form.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #495057;
+            font-size: 0.95rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            background: #fff;
+        }
+
+        .form-group input::placeholder {
+            color: #adb5bd;
+        }
+
+        /* 输入框包装器 */
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-wrapper input {
+            padding-right: 50px;
+        }
+
+        /* 输入图标 */
+        .input-icon {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #adb5bd;
+            font-size: 1.1rem;
+            pointer-events: none;
+            transition: color 0.3s ease;
+        }
+
+        .form-group input:focus+.input-icon {
+            color: #667eea;
+        }
+
+        /* 动态标题更新 */
+        .auth-title.register {
+            display: block !important;
+        }
+
+        .auth-title.login {
+            display: block !important;
+        }
+
+        /* 底部链接增强 */
+        .auth-footer {
+            margin-top: 30px;
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .auth-footer p {
+            color: #6c757d;
+            margin: 5px 0;
+            font-size: 0.9rem;
+        }
+
+        .auth-footer a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .auth-footer a:hover {
+            color: #5a67d8;
+            text-decoration: underline;
+        }
+
+        /* 按钮样式 */
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-login {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-login:hover {
+            background: linear-gradient(135deg, #5a67d8, #6c5ce7);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .btn-register {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            color: white;
+            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+        }
+
+        .btn-register:hover {
+            background: linear-gradient(135deg, #27ae60, #229954);
+            box-shadow: 0 6px 20px rgba(46, 204, 113, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .btn-submit::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-submit:hover::before {
+            left: 100%;
+        }
+
+        /* 链接样式 */
+        .auth-links {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9rem;
+        }
+
+        .auth-links a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .auth-links a:hover {
+            color: #5a67d8;
+            text-decoration: underline;
+        }
+
+        /* 分隔线 */
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 25px 0;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #dee2e6;
+        }
+
+        .divider span {
+            padding: 0 15px;
+            background: rgba(248, 249, 250, 0.9);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .auth-container {
+                margin: 20px;
+                padding: 30px 25px;
+            }
+
+            .brand-header {
+                position: static;
+                transform: none;
+                margin-bottom: 20px;
+            }
+
+            body {
+                flex-direction: column;
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .auth-container {
+                margin: 10px;
+                padding: 25px 20px;
+            }
+
+            .brand-logo {
+                font-size: 2rem;
+            }
+
+            .auth-title {
+                font-size: 1.5rem;
+            }
+
+            .auth-tab {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* 成功消息样式 */
+        .success-message {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 20px;
+            border: 1px solid #c3e6cb;
+            font-weight: 500;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 加载动画 */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* 角色选择器样式 */
+        .role-selector {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .role-option {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .role-option:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .role-option.active {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #f0f4ff, #e8ecff);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+
+        .role-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .role-name {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 4px;
+        }
+
+        .role-desc {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+
+        .role-option.active .role-name {
+            color: #667eea;
+        }
+
+        /* 商家字段动画 */
+        .merchant-fields {
+            animation: slideDown 0.3s ease;
+        }
+
+        .merchant-fields .form-group {
+            margin-bottom: 20px;
+        }
+    </style>
+    <!-- New styles for wide layout -->
+    <style>
+        .auth-container {
+            transition: max-width 0.3s ease;
+        }
+
+        .auth-container.wide {
+            max-width: 800px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            align-items: start;
+        }
+
+        .form-section {
+            background: rgba(248, 249, 250, 0.5);
+            padding: 20px;
+            border-radius: 12px;
+            height: 100%;
+        }
+
+        .form-section-title {
+            font-size: 1.1rem;
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e9ecef;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Mobile adaptation */
+        @media (max-width: 768px) {
+            .auth-container.wide {
+                max-width: 100%;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 品牌头部 -->
+    <div class="brand-header">
+        <div class="brand-logo">惠多多</div>
+        <div class="brand-tagline">品质生活，从这里开始</div>
+    </div>
+
+
+    <div class="auth-container">
+        <!-- 动态标题 -->
+        <div id="dynamicTitle" class="auth-title active">欢迎回来</div>
+
+        <div class="auth-tabs">
+            <div class="auth-tab active" onclick="switchTab('login')">
+                <i class="fas fa-sign-in-alt"></i> 登录
+            </div>
+            <div class="auth-tab" onclick="switchTab('register')">
+                <i class="fas fa-user-plus"></i> 注册
+            </div>
+        </div>
+
+        <!-- Login Form -->
+        <form id="loginForm" class="auth-form active">
+            <div class="form-group">
+                <label for="loginEmail">邮箱地址</label>
+                <div class="input-wrapper">
+                    <input type="email" id="loginEmail" placeholder="请输入您的邮箱" required>
+                    <span class="input-icon">📧</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="loginPassword">密码</label>
+                <div class="input-wrapper">
+                    <input type="password" id="loginPassword" placeholder="请输入您的密码" required>
+                    <span class="input-icon">🔒</span>
+                </div>
+            </div>
+            <button type="submit" class="btn-submit btn-login">
+                <span class="btn-text">立即登录</span>
+            </button>
+        </form>
+
+        <!-- Register Form -->
+        <form id="registerForm" class="auth-form">
+            <div class="form-grid">
+                <!-- Left Column: Basic Info -->
+                <div class="form-section">
+                    <div class="form-section-title">
+                        <i class="fas fa-user-circle"></i> 基本信息
+                    </div>
+                    <div class="form-group">
+                        <label for="regName">姓名</label>
+                        <div class="input-wrapper">
+                            <input type="text" id="regName" placeholder="您的真实姓名" required>
+                            <span class="input-icon">👤</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="regEmail">邮箱地址</label>
+                        <div class="input-wrapper">
+                            <input type="email" id="regEmail" placeholder="您的邮箱地址" required>
+                            <span class="input-icon">📧</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="regPassword">密码</label>
+                        <div class="input-wrapper">
+                            <input type="password" id="regPassword" placeholder="设置登录密码" required>
+                            <span class="input-icon">🔒</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>账户类型</label>
+                        <div class="role-selector">
+                            <div class="role-option active" data-role="user" onclick="selectRole('user')">
+                                <div class="role-icon">🛒</div>
+                                <div class="role-name">买家</div>
+                            </div>
+                            <div class="role-option" data-role="merchant" onclick="selectRole('merchant')">
+                                <div class="role-icon">🏪</div>
+                                <div class="role-name">商家</div>
+                            </div>
+                        </div>
+                        <input type="hidden" id="regRole" value="user">
+                    </div>
+                </div>
+
+                <!-- Right Column: Merchant Info (Empty placeholder for Users) -->
+                <div class="form-section" id="merchantSection" style="display:none;">
+                    <div class="form-section-title">
+                        <i class="fas fa-store"></i> 店铺信息
+                    </div>
+                    <div class="merchant-fields">
+                        <div class="form-group">
+                            <label for="shopName">店铺名称</label>
+                            <div class="input-wrapper">
+                                <input type="text" id="shopName" placeholder="例如：惠多多旗舰店">
+                                <span class="input-icon">🏬</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="shopDescription">店铺简介</label>
+                            <div class="input-wrapper">
+                                <input type="text" id="shopDescription" placeholder="一句话介绍您的店铺">
+                                <span class="input-icon">📝</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="contactPhone">联系电话</label>
+                            <div class="input-wrapper">
+                                <input type="tel" id="contactPhone" placeholder="您的联系电话">
+                                <span class="input-icon">📞</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Placeholder for layout balance when not merchant -->
+                <div class="form-section" id="userPlaceholder"
+                    style="display:flex; align-items:center; justify-content:center; flex-direction:column; text-align:center; color:#7f8c8d;">
+                    <i class="fas fa-shopping-bag" style="font-size: 3rem; margin-bottom: 20px; color:#e9ecef;"></i>
+                    <p>注册成为惠多多会员<br>开启您的品质购物之旅</p>
+                </div>
+            </div>
+
+            <div style="margin-top: 30px;">
+                <button type="submit" class="btn-submit btn-register">
+                    <span class="btn-text">立即注册</span>
+                </button>
+            </div>
+        </form>
+
+        <!-- 底部链接 -->
+        <div class="auth-footer">
+            <p>还没有账户？<a href="#" onclick="switchTab('register')">立即注册</a></p>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tab) {
+            // 移除所有active类
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+
+            // 清除所有标题类
+            const titleElement = document.getElementById('dynamicTitle');
+            titleElement.className = 'auth-title';
+
+            const container = document.querySelector('.auth-container');
+
+            if (tab === 'login') {
+                // 添加active类到登录tab和表单
+                document.querySelectorAll('.auth-tab')[0].classList.add('active');
+                document.getElementById('loginForm').classList.add('active');
+                // 登录模式：窄布局
+                container.classList.remove('wide');
+
+                // 更新标题为登录
+                titleElement.textContent = '欢迎回来';
+                titleElement.classList.add('active', 'login');
+
+                // 更新底部链接
+                updateFooterLinks('login');
+            } else {
+                // 添加active类到注册tab和表单
+                document.querySelectorAll('.auth-tab')[1].classList.add('active');
+                document.getElementById('registerForm').classList.add('active');
+                // 注册模式：宽布局 (初始化为用户角色或保持当前选择)
+                const currentRole = document.getElementById('regRole').value;
+                selectRole(currentRole); // 确保布局正确
+
+                // 更新标题为注册
+                titleElement.textContent = '加入惠多多';
+                titleElement.classList.add('active', 'register');
+
+                // 更新底部链接
+                updateFooterLinks('register');
+            }
+        }
+
+        function updateFooterLinks(tab) {
+            const footer = document.querySelector('.auth-footer');
+            if (tab === 'login') {
+                footer.innerHTML = `
+                    <p>还没有账户？<a href="#" onclick="switchTab('register')">立即注册</a></p>
+                `;
+            } else {
+                footer.innerHTML = `
+                    <p>已有账户？<a href="#" onclick="switchTab('login')">立即登录</a></p>
+                    <p>注册即表示同意<a href="#">服务条款</a>和<a href="#">隐私政策</a></p>
+                `;
+            }
+        }
+
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', function () {
+            switchTab('login');
+        });
+
+        // Login Logic
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const submitBtn = e.target.querySelector('.btn-submit');
+            const btnText = submitBtn.querySelector('.btn-text');
+
+            // 显示加载状态
+            btnText.innerHTML = '<span class="loading"></span>登录中...';
+            submitBtn.disabled = true;
+
+            try {
+                const res = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                const data = await res.json();
+
+                if (res.ok) {
+                    // 显示成功消息
+                    showMessage('登录成功！正在跳转...', 'success');
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    setTimeout(() => {
+                        window.location.href = '/';
+                    }, 1000);
+                } else {
+                    showMessage(data.message || '登录失败，请检查邮箱和密码', 'error');
+                }
+            } catch (err) {
+                showMessage('网络错误，请稍后重试', 'error');
+            } finally {
+                // 恢复按钮状态
+                btnText.textContent = '立即登录';
+                submitBtn.disabled = false;
+            }
+        });
+
+        // 角色选择函数
+        function selectRole(role) {
+            // 更新选中状态
+            document.querySelectorAll('.role-option').forEach(opt => {
+                opt.classList.remove('active');
+            });
+            document.querySelector(`.role-option[data-role="${role}"]`).classList.add('active');
+            document.getElementById('regRole').value = role;
+
+            const merchantSection = document.getElementById('merchantSection');
+            const userPlaceholder = document.getElementById('userPlaceholder');
+            const container = document.querySelector('.auth-container');
+
+            if (role === 'merchant') {
+                // 商家模式：显示双栏宽布局
+                merchantSection.style.display = 'block';
+                userPlaceholder.style.display = 'none';
+                container.classList.add('wide');
+
+                // 设置商家字段为必填
+                document.getElementById('shopName').required = true;
+            } else {
+                // 用户模式：显示占位符或保持宽布局（为了美观保持宽布局，或者切回窄布局）
+                // 这里的策略是：用户注册也保持双栏布局（左填表，右占位图），视觉更平衡
+                merchantSection.style.display = 'none';
+                userPlaceholder.style.display = 'flex';
+                container.classList.add('wide');
+
+                document.getElementById('shopName').required = false;
+            }
+        }
+
+        // Register Logic
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('regName').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            const role = document.getElementById('regRole').value;
+            const submitBtn = e.target.querySelector('.btn-submit');
+            const btnText = submitBtn.querySelector('.btn-text');
+
+            // 构建注册数据
+            const registerData = { name, email, password, role };
+
+            // 如果是商家，添加商家信息
+            if (role === 'merchant') {
+                const shopName = document.getElementById('shopName').value;
+                const shopDescription = document.getElementById('shopDescription').value;
+                const contactPhone = document.getElementById('contactPhone').value;
+
+                if (!shopName) {
+                    showMessage('请输入店铺名称', 'error');
+                    return;
+                }
+
+                registerData.merchantInfo = {
+                    shopName: shopName,
+                    shopDescription: shopDescription,
+                    contactPhone: contactPhone,
+                    rating: 5.0,
+                    totalSales: 0
+                };
+            }
+
+            // 显示加载状态
+            btnText.innerHTML = '<span class="loading"></span>注册中...';
+            submitBtn.disabled = true;
+
+            try {
+                const res = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(registerData)
+                });
+                const data = await res.json();
+
+                if (res.ok) {
+                    const successMsg = role === 'merchant'
+                        ? '商家注册成功！正在跳转到登录页面...'
+                        : '注册成功！正在跳转到登录页面...';
+                    showMessage(successMsg, 'success');
+                    setTimeout(() => {
+                        switchTab('login');
+                    }, 1500);
+                } else {
+                    showMessage(data.message || '注册失败，请检查输入信息', 'error');
+                }
+            } catch (err) {
+                showMessage('网络错误，请稍后重试', 'error');
+            } finally {
+                // 恢复按钮状态
+                btnText.textContent = '立即注册';
+                submitBtn.disabled = false;
+            }
+        });
+
+        // 显示消息函数
+        function showMessage(message, type) {
+            // 移除已存在的消息
+            const existingMessage = document.querySelector('.success-message, .error-message');
+            if (existingMessage) {
+                existingMessage.remove();
+            }
+
+            // 创建新的消息元素
+            const messageDiv = document.createElement('div');
+            messageDiv.className = type === 'success' ? 'success-message' : 'error-message';
+            messageDiv.textContent = message;
+
+            // 样式
+            if (type === 'error') {
+                messageDiv.style.cssText = `
+                    background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+                    color: #721c24;
+                    padding: 15px;
+                    border-radius: 8px;
+                    text-align: center;
+                    margin-bottom: 20px;
+                    border: 1px solid #f5c6cb;
+                    font-weight: 500;
+                    animation: slideDown 0.3s ease;
+                `;
+            }
+
+            // 插入到表单前面
+            const activeForm = document.querySelector('.auth-form.active');
+            activeForm.parentNode.insertBefore(messageDiv, activeForm);
+
+            // 3秒后自动移除
+            setTimeout(() => {
+                if (messageDiv.parentNode) {
+                    messageDiv.remove();
+                }
+            }, 3000);
+        }
+    </script>
+</body>
+
+</html>

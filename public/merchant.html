@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>惠多多 - 商家店铺</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand huiddo-brand" onclick="window.location.href='/'" style="cursor:pointer;">惠多多</div>
+        
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="搜索商品...">
+            <button onclick="searchProducts()"><i class="fas fa-search"></i></button>
+        </div>
+
+        <div class="nav-actions">
+            <div class="nav-item" onclick="window.location.href='/'">
+                <i class="fas fa-home"></i> 首页
+            </div>
+            <div class="nav-item" onclick="window.location.href='products.html'">
+                <i class="fas fa-th"></i> 全部商品
+            </div>
+
+            <div class="user-menu">
+                <div class="user-info" onclick="toggleUserMenu()">
+                    <i class="fas fa-user"></i>
+                    <span class="user-name">用户</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div id="userDropdown" class="user-dropdown" style="display: none;">
+                    <!-- Menu items will be injected by app.js -->
+                </div>
+            </div>
+            <div class="nav-cart" onclick="toggleCart()">
+                <i class="fas fa-shopping-cart"></i>
+                <span id="cartCount">0</span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Merchant Header -->
+        <div id="merchantHeader" style="background: white; padding: 30px; border-radius: 15px; margin-bottom: 30px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 30px;">
+            <div style="width: 100px; height: 100px; background: #f8f9fa; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 3em; color: #3498db;">
+                <i class="fas fa-store"></i>
+            </div>
+            <div style="flex: 1;">
+                <h1 id="shopName" style="margin: 0 0 10px 0; color: #2c3e50;">加载中...</h1>
+                <p id="shopDesc" style="color: #7f8c8d; margin: 0 0 15px 0;">...</p>
+                <div style="display: flex; gap: 20px; font-size: 0.9em;">
+                    <span style="color: #f1c40f;"><i class="fas fa-star"></i> <span id="shopRating">0.0</span></span>
+                    <span style="color: #2ecc71;"><i class="fas fa-shopping-bag"></i> 销量: <span id="shopSales">0</span></span>
+                    <span style="color: #3498db;"><i class="fas fa-phone"></i> <span id="shopPhone">...</span></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-header" style="text-align: left; margin-bottom: 20px; padding-left: 10px; border-left: 4px solid #3498db;">
+            <h2 style="font-size: 1.5em; margin: 0;">店铺商品</h2>
+        </div>
+
+        <section id="merchantProducts">
+            <div id="productList" class="product-grid">
+                <div style="grid-column: 1/-1; text-align: center; padding: 40px;">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 2em; color: #3498db;"></i>
+                    <p style="margin-top: 15px; color: #7f8c8d;">正在加载店铺商品...</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Shopping Cart Sidebar -->
+    <div id="cartSidebar" class="cart-sidebar">
+        <div class="cart-header">
+            <h3>购物车</h3>
+            <button onclick="toggleCart()" class="close-cart">&times;</button>
+        </div>
+        <div id="cartItems" class="cart-items">
+            <p class="empty-cart">购物车是空的</p>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">总计: ¥<span id="cartTotal">0.00</span></div>
+            <button onclick="checkout()" class="checkout-btn">去结算</button>
+        </div>
+    </div>
+
+    <div id="overlay" class="overlay" onclick="closeAllOverlays()"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>

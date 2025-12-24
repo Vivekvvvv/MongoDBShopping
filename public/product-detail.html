@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>惠多多 - 商品详情</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand huiddo-brand" onclick="window.location.href='/'" style="cursor:pointer;">惠多多</div>
+        
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="搜索商品...">
+            <button onclick="searchProducts()"><i class="fas fa-search"></i></button>
+        </div>
+
+        <div class="nav-actions">
+            <div class="nav-item" onclick="window.location.href='/'">
+                <i class="fas fa-home"></i> 首页
+            </div>
+            <div class="nav-item" onclick="window.location.href='products.html'">
+                <i class="fas fa-th"></i> 全部商品
+            </div>
+
+            <div class="user-menu">
+                <div class="user-info" onclick="toggleUserMenu()">
+                    <i class="fas fa-user"></i>
+                    <span class="user-name">用户</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div id="userDropdown" class="user-dropdown" style="display: none;">
+                    <!-- Menu items will be injected by app.js -->
+                </div>
+            </div>
+            <div class="nav-cart" onclick="toggleCart()">
+                <i class="fas fa-shopping-cart"></i>
+                <span id="cartCount">0</span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div id="productDetailContainer" class="product-detail-container">
+            <div style="text-align: center; padding: 50px;">
+                <i class="fas fa-spinner fa-spin" style="font-size: 3em; color: #3498db;"></i>
+                <p style="margin-top: 20px; color: #7f8c8d;">正在加载商品详情...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Shopping Cart Sidebar -->
+    <div id="cartSidebar" class="cart-sidebar">
+        <div class="cart-header">
+            <h3>购物车</h3>
+            <button onclick="toggleCart()" class="close-cart">&times;</button>
+        </div>
+        <div id="cartItems" class="cart-items">
+            <p class="empty-cart">购物车是空的</p>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">总计: ¥<span id="cartTotal">0.00</span></div>
+            <button onclick="checkout()" class="checkout-btn">去结算</button>
+        </div>
+    </div>
+
+    <div id="overlay" class="overlay" onclick="closeAllOverlays()"></div>
+
+    <script src="app.js"></script>
+    <script>
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+            
+            if (productId) {
+                loadProductDetail(productId);
+            } else {
+                document.getElementById('productDetailContainer').innerHTML = `
+                    <div style="text-align: center; padding: 50px;">
+                        <i class="fas fa-exclamation-circle" style="font-size: 3em; color: #e74c3c;"></i>
+                        <h3>未指定商品</h3>
+                        <button onclick="window.location.href='/'" class="btn btn-primary" style="margin-top: 20px;">返回首页</button>
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>
