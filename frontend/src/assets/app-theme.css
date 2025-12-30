@@ -1,0 +1,244 @@
+/* 针对现有 legacy 样式做“统一外观”覆盖：不改页面结构，只统一按钮/输入/卡片 */
+
+:root {
+  --brand-primary: var(--el-color-primary);
+  --brand-primary-hover: var(--el-color-primary-dark-2);
+  --brand-bg: var(--el-bg-color-page);
+  --brand-card: var(--el-bg-color);
+  --brand-text: var(--el-text-color-primary);
+  --brand-muted: var(--el-text-color-regular);
+  --brand-border: var(--el-border-color-lighter);
+  --brand-radius: 12px;
+
+  /* 更克制、更现代的阴影层级 */
+  --brand-shadow-1: 0 1px 2px rgba(16, 24, 40, 0.06);
+  --brand-shadow-2: 0 10px 28px rgba(16, 24, 40, 0.10);
+  --brand-shadow-3: 0 18px 48px rgba(16, 24, 40, 0.14);
+
+  /* 统一过渡（减少“廉价动画感”，但保留细腻反馈） */
+  --brand-transition: 140ms ease;
+}
+
+/* ============
+   全局降亮度
+   - 强制覆盖 legacy-style.css 的渐变 body 背景
+   - 保留其布局（例如 padding-top），只改“观感”
+   ============ */
+html,
+body {
+  background: var(--brand-bg) !important;
+  background-image: none !important;
+  color: var(--brand-text) !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 统一页面主容器背景（避免大面积纯白刺眼） */
+main.container {
+  background: transparent;
+}
+
+/* Element Plus：卡片/按钮整体更“雾面” */
+.el-card {
+  border-radius: var(--brand-radius);
+  border-color: var(--brand-border);
+  box-shadow: var(--brand-shadow-1);
+}
+
+.el-button {
+  border-radius: 10px;
+  font-weight: 600;
+  transition: background-color var(--brand-transition), border-color var(--brand-transition), color var(--brand-transition), transform var(--brand-transition);
+}
+
+.el-button--primary {
+  box-shadow: none;
+}
+
+/* 统一卡片圆角/阴影 */
+.card,
+.shop-card,
+.product-card,
+.form-container {
+  border-radius: var(--brand-radius) !important;
+  border: 1px solid var(--brand-border) !important;
+  box-shadow: var(--brand-shadow-1) !important;
+  background: var(--brand-card);
+}
+
+/* 统一按钮（覆盖现有 .btn / .btn-submit / .btn-sm / .btn-edit / .btn-* 等） */
+.btn,
+.btn-submit,
+.btn-sm,
+.btn-edit {
+  border-radius: 10px !important;
+}
+
+/* 先“去渐变”+统一基本按钮形态 */
+.btn,
+.btn-primary,
+.btn-submit,
+.btn-edit,
+.btn-refresh,
+.checkout-btn,
+.clear-cart-btn {
+  background-image: none !important;
+  box-shadow: none !important;
+  transition: background-color var(--brand-transition), border-color var(--brand-transition), color var(--brand-transition), transform var(--brand-transition);
+}
+
+.btn,
+.btn-primary,
+.btn-submit,
+.btn-edit,
+.checkout-btn {
+  background: var(--brand-primary) !important;
+  border: 1px solid var(--brand-primary) !important;
+  color: var(--el-color-white) !important;
+}
+
+.btn-secondary,
+.clear-cart-btn {
+  background: var(--el-fill-color-blank) !important;
+  border: 1px solid var(--brand-border) !important;
+  color: var(--brand-text) !important;
+}
+
+.btn-success {
+  background: var(--el-color-success) !important;
+  border: 1px solid var(--el-color-success) !important;
+  color: var(--el-color-white) !important;
+}
+
+.btn-warning {
+  background: var(--el-color-warning) !important;
+  border: 1px solid var(--el-color-warning) !important;
+  color: var(--el-color-white) !important;
+}
+
+.btn:hover,
+.btn-primary:hover,
+.btn-submit:hover,
+.btn-edit:hover,
+.checkout-btn:hover {
+  background: var(--brand-primary-hover) !important;
+  filter: none !important;
+  transform: translateY(-1px);
+}
+
+.btn-secondary:hover,
+.clear-cart-btn:hover {
+  border-color: var(--el-border-color) !important;
+  background: var(--el-fill-color-light) !important;
+}
+
+/* 危险按钮统一 */
+.btn-danger {
+  background: var(--el-color-danger) !important;
+  border: 1px solid var(--el-color-danger) !important;
+  color: var(--el-color-white) !important;
+}
+
+.btn-danger:hover {
+  background: var(--el-color-danger-dark-2) !important;
+}
+
+/* 输入框统一（尽量不破坏布局） */
+input,
+select,
+textarea {
+  border-radius: 10px;
+  border-color: var(--brand-border) !important;
+  transition: box-shadow var(--brand-transition), border-color var(--brand-transition), background-color var(--brand-transition);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--brand-primary) !important;
+  box-shadow: 0 0 0 3px rgba(22, 119, 255, 0.12) !important;
+}
+
+/* Navbar：去掉紫色渐变，降低“刺眼” */
+.navbar {
+  background-image: none !important;
+  /* 更高级：浅色磨砂顶栏（不再一整条大蓝色） */
+  background: rgba(255, 255, 255, 0.82) !important;
+  color: var(--brand-text) !important;
+  box-shadow: var(--brand-shadow-1);
+  border-bottom: none;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* 顶栏品牌：从“白色渐变字”改成主色实心字（适配浅底） */
+.nav-brand,
+.huiddo-brand {
+  background: none !important;
+  -webkit-background-clip: initial !important;
+  -webkit-text-fill-color: initial !important;
+  text-shadow: none !important;
+  color: var(--brand-primary) !important;
+  letter-spacing: 0.5px;
+}
+
+/* 顶部搜索框/导航按钮：减少高亮白块与强阴影 */
+.search-bar {
+  background: rgba(255, 255, 255, 0.92) !important;
+  box-shadow: none !important;
+  border: 1px solid var(--brand-border) !important;
+}
+
+.search-bar button {
+  background-image: none !important;
+  background: var(--brand-primary) !important;
+  border-radius: 9999px;
+}
+
+.search-bar button:hover {
+  background: var(--brand-primary-hover) !important;
+}
+
+.nav-item,
+.nav-cart {
+  background: transparent !important;
+  color: var(--brand-text) !important;
+  border: 1px solid transparent;
+  border-radius: 9999px;
+  box-shadow: none;
+  transition: background-color var(--brand-transition), transform var(--brand-transition);
+}
+
+.nav-item:hover,
+.nav-cart:hover {
+  background: var(--el-fill-color-light) !important;
+  border-color: var(--brand-border);
+  transform: translateY(-1px);
+}
+
+/* 导航 icon/文字更精致 */
+.nav-item i,
+.nav-actions i {
+  color: var(--brand-primary) !important;
+}
+
+.nav-item span {
+  color: inherit !important;
+}
+
+/* 当前路由高亮：更像 tab，而不是“粗胶囊按钮” */
+.nav-item.router-link-active,
+.nav-item.router-link-exact-active {
+  background: var(--el-fill-color) !important;
+  border-color: var(--brand-border);
+  color: var(--brand-primary) !important;
+}
+
+/* 下拉菜单/弹窗风格更统一 */
+.user-dropdown,
+.modal-card {
+  border-radius: var(--brand-radius) !important;
+  border: 1px solid var(--brand-border) !important;
+  box-shadow: var(--brand-shadow-3) !important;
+}

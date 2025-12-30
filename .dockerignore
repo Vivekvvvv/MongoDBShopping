@@ -1,0 +1,11 @@
+node_modules
+frontend/node_modules
+dist
+npm-debug.log
+Dockerfile
+.dockerignore
+.git
+.azure
+.vscode
+__tests__
+coverage

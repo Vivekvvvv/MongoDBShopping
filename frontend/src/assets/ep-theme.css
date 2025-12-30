@@ -1,0 +1,30 @@
+/* Element Plus 主题变量覆盖：电商蓝 + 更柔和的页面底色（降低“太亮”的观感） */
+:root {
+  /* 电商蓝（保持蓝系，但避免过亮对比） */
+  --el-color-primary: #155eef;
+  --el-color-primary-light-3: #3b82f6;
+  --el-color-primary-light-5: #60a5fa;
+  --el-color-primary-light-7: #93c5fd;
+  --el-color-primary-light-8: #bfdbfe;
+  --el-color-primary-light-9: #eff6ff;
+  --el-color-primary-dark-2: #0b4bcd;
+
+  /* 页面底色与基础文本（用更“雾面”的灰白替代大面积渐变） */
+  --el-bg-color-page: #f2f4f7;
+  --el-bg-color: #ffffff;
+
+  /* 边框更克制、更“高级” */
+  --el-border-color-lighter: rgba(16, 24, 40, 0.10);
+  --el-border-color-light: rgba(16, 24, 40, 0.14);
+  --el-border-color: rgba(16, 24, 40, 0.18);
+
+  /* 圆角与字体 */
+  --el-border-radius-base: 10px;
+  --el-border-radius-round: 9999px;
+  --el-font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+}
+
+body {
+  background: var(--el-bg-color-page);
+  color: var(--el-text-color-primary);
+}

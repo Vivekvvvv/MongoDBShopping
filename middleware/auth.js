@@ -36,6 +36,7 @@ const authenticate = (req, res, next) => {
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return res.status(401).json({
+        success: false,
         message: '未提供认证令牌',
         code: 'NO_TOKEN'
       });
@@ -46,6 +47,7 @@ const authenticate = (req, res, next) => {
 
     if (!decoded) {
       return res.status(401).json({
+        success: false,
         message: '认证令牌无效或已过期',
         code: 'INVALID_TOKEN'
       });
@@ -56,6 +58,7 @@ const authenticate = (req, res, next) => {
     next();
   } catch (error) {
     return res.status(401).json({
+      success: false,
       message: '认证失败',
       code: 'AUTH_FAILED'
     });
@@ -90,6 +93,7 @@ const authorize = (...roles) => {
   return (req, res, next) => {
     if (!req.user) {
       return res.status(401).json({
+        success: false,
         message: '请先登录',
         code: 'NOT_LOGGED_IN'
       });
@@ -97,6 +101,7 @@ const authorize = (...roles) => {
 
     if (!roles.includes(req.user.role)) {
       return res.status(403).json({
+        success: false,
         message: '您没有权限执行此操作',
         code: 'FORBIDDEN'
       });
